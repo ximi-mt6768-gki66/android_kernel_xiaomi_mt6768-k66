@@ -1,0 +1,3 @@
+# Placeholder Kconfig for the Longcheer vendor kernel modules.
+# The original vendor/longcheer/mtk/kernel_modules repository is not part
+# of the sources provided, so there are no extra options to source here.

@@ -1,0 +1,53 @@
+# Local legacy build configuration for Xiaomi Redmi 15C (dew)
+
+KERNEL_DIR=kernel_modules
+
+. ${ROOT_DIR}/kernel_modules/build.config.mtk_kernel_device_modules
+
+# Fully merged defconfig (gki_defconfig + mgk_64_k66_defconfig +
+# mt6768_overlay.config + dew.config + sign.config).
+DEFCONFIG=dew_defconfig
+
+EXT_MODULES="kernel_modules"
+
+MAKE_GOALS="Image modules"
+
+GKI_BUILD_CONFIG=
+GKI_PREBUILTS_DIR=
+KMI_SYMBOL_LIST=
+ADDITIONAL_KMI_SYMBOL_LISTS=
+ABI_DEFINITION=
+GKI_MODULES_LIST=
+KMI_ENFORCED=
+KMI_SYMBOL_LIST_STRICT_MODE=
+TRIM_NONLISTED_KMI=
+MODULES_ORDER=
+
+# Use the host toolchain alongside the AOSP clang prebuilt instead of the
+# hermetic toolchain directories that are not present here.
+HERMETIC_TOOLCHAIN=0
+BUILDTOOLS_PREBUILT_BIN=build/build-tools/path/linux-x86
+DTC=dtc
+
+# Internal Longcheer repository is not shipped; point at the placeholder.
+LQ_KERNEL_DIR=${ROOT_DIR}/vendor/longcheer/mtk/kernel_modules
+
+: ${LTO:=thin}
+
+# The kernel headers tarball is not needed for a device kernel build.
+SKIP_CP_KERNEL_HDR=1
+
+# Copy the kernel image and symbol artefacts into ${OUT_DIR}/dist.
+FILES="
+arch/arm64/boot/Image
+vmlinux
+System.map
+vmlinux.symvers
+modules.builtin
+modules.builtin.modinfo
+"
+DIST_CMDS='cp -p ${OUT_DIR}/.config ${DIST_DIR}'
+
+# Install the in-tree device modules into the staging directory so that the
+# resulting .ko files are copied into ${OUT_DIR}/dist as well.
+IN_KERNEL_MODULES=1
