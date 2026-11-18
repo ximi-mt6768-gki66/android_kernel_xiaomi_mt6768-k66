@@ -646,6 +646,15 @@ unsigned int mt_gpufreq_update_volt(unsigned int pmic_volt[], unsigned int array
 	GPUFREQ_LOGD("update OPP table to given voltage\n");
 
 	for (i = 0; i < array_size; i++) {
+		/*
+		 * PTPOD must not raise vGPU above the ceiling this table was
+		 * built for.  regulator_set_voltage() uses VGPU_MAX_VOLT as
+		 * its upper bound and would fail (-> BUG_ON in
+		 * __gpufreq_abort()) if the calibrated value exceeded it.
+		 */
+		if (pmic_volt[i] > VGPU_MAX_VOLT)
+			pmic_volt[i] = VGPU_MAX_VOLT;
+
 		target_idx = __gpufreq_get_ptpod_opp_idx(i);
 		signed_table[target_idx].volt = pmic_volt[i];
 		signed_table[target_idx].vsram =
@@ -955,6 +964,21 @@ unsigned int __gpufreq_get_vsram_by_vgpu(unsigned int vgpu)
 		vsram = vgpu + VSRAM_FIXED_DIFF;
 	else
 		vsram = VSRAM_FIXED_VOLT;
+
+	/*
+	 * Never request more than the signed-off VSRAM ceiling.  The
+	 * regulator call uses VSRAM_MAX_VOLT as its upper bound, and a
+	 * min_uV above that bound makes regulator_set_voltage() fail,
+	 * which ends in __gpufreq_abort()/BUG_ON().
+	 *
+	 * This only matters for tables whose top vGPU is above 950 mV
+	 * (95000 in this file's mV x 100 units; the stock MT6768 top point
+	 * lands exactly on the ceiling), but keeping the ceiling
+	 * authoritative protects the PTPOD, aging and fixed-frequency paths
+	 * as well.
+	 */
+	if (vsram > VSRAM_MAX_VOLT)
+		vsram = VSRAM_MAX_VOLT;
 
 	return vsram;
 }

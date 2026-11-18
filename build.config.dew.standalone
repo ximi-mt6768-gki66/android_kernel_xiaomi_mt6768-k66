@@ -4,9 +4,8 @@ KERNEL_DIR=kernel_modules
 
 . ${ROOT_DIR}/kernel_modules/build.config.mtk_kernel_device_modules
 
-# Fully merged defconfig (gki_defconfig + mgk_64_k66_defconfig +
-# mt6768_overlay.config + dew.config + sign.config).
-DEFCONFIG=dew_defconfig
+DEFCONFIG=mt6768_defconfig
+POST_DEFCONFIG_CMDS='KCONFIG_CONFIG=${OUT_DIR}/.config ${KERNEL_DIR}/scripts/kconfig/merge_config.sh -m ${OUT_DIR}/.config ${KERNEL_DIR}/arch/arm64/configs/dew.config'
 
 EXT_MODULES="kernel_modules"
 

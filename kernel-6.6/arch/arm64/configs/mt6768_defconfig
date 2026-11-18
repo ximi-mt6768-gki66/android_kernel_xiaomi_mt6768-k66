@@ -1,11 +1,6 @@
-# Merged defconfig for Xiaomi 15C / Redmi 15C / POCO C85 (dew), MT6768.
-# Derived from: gki_defconfig + mgk_64_k66_defconfig + mt6768_overlay.config
-# + dew.config + sign.config + the Longcheer dew overlay.
-# KASAN is disabled: clang r510928 aborts in the ThinLTO backend
-# ("Broken module found ... __asan_handle_no_return") when KASAN is combined
-# with CONFIG_LTO_CLANG_THIN.
+CONFIG_LOCALVERSION="-AtrociousLTS"
+# CONFIG_LOCALVERSION_AUTO is not set
 CONFIG_UAPI_HEADER_TEST=y
-CONFIG_LOCALVERSION="-4k"
 CONFIG_AUDIT=y
 CONFIG_TIME_KUNIT_TEST=m
 CONFIG_NO_HZ=y
@@ -103,7 +98,7 @@ CONFIG_MODULE_UNLOAD=y
 CONFIG_MODVERSIONS=y
 CONFIG_MODULE_SCMVERSION=y
 CONFIG_MODULE_SIG=y
-CONFIG_MODULE_SIG_PROTECT=y
+# CONFIG_MODULE_SIG_PROTECT is not set
 # CONFIG_MODULE_SIG_ALL is not set
 CONFIG_MODPROBE_PATH="/system/bin/modprobe"
 CONFIG_BLK_DEV_ZONED=y
@@ -1128,7 +1123,7 @@ CONFIG_MTK_GPU_POWER_THROTTLING=m
 CONFIG_MTK_PMIC_PROTECT=m
 CONFIG_MEDIATEK_CPU_DVFS=m
 CONFIG_MEDIATEK_CPUFREQ_DEBUG_LITE=m
-CONFIG_MTK_PTPOD_LEGACY=m
+# CONFIG_MTK_PTPOD_LEGACY is not set
 CONFIG_MTK_STATIC_POWER_LEGACY=m
 CONFIG_MTK_MDPM_LEGACY=m
 CONFIG_MTK_PBM=m

@@ -1,0 +1,35 @@
+# Local legacy build configuration for Xiaomi Redmi 13C (gale)
+
+KERNEL_DIR=kernel-6.6
+
+. ${ROOT_DIR}/${KERNEL_DIR}/build.config.gki.aarch64
+
+# Local environment overrides
+HERMETIC_TOOLCHAIN=0
+BUILDTOOLS_PREBUILT_BIN=build/build-tools/path/linux-x86
+DTC=dtc
+
+# Build the kernel image and the GKI modules.  Module.symvers is needed for
+# the ABI comparison and for building the external test module.
+MAKE_GOALS="Image modules"
+IN_KERNEL_MODULES=
+EXT_MODULES=
+BUILD_SYSTEM_DLKM=
+BUILD_GKI_ARTIFACTS=
+BUILD_GKI_CERTIFICATION_TOOLS=
+
+# Keep the full config in dist for inspection.
+SKIP_CP_KERNEL_HDR=1
+FILES="
+arch/arm64/boot/Image
+vmlinux
+System.map
+vmlinux.symvers
+modules.builtin
+modules.builtin.modinfo
+"
+DIST_CMDS='cp -p ${OUT_DIR}/.config ${DIST_DIR}'
+
+: ${LTO:=thin}
+
+POST_DEFCONFIG_CMDS='${KERNEL_DIR}/scripts/config --file ${OUT_DIR}/.config --set-val CONFIG_LOCALVERSION_AUTO n'

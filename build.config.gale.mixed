@@ -1,0 +1,46 @@
+# mixed build configuration for Xiaomi Redmi 13C (gale) - vendor modules from dew
+#
+# Only the vendor modules are compiled here, against that GKI's
+# vmlinux.symvers, so the stock vendor_boot modules keep working untouched.
+
+KERNEL_DIR=kernel_modules
+
+. ${ROOT_DIR}/kernel_modules/build.config.mtk_kernel_device_modules
+
+DEFCONFIG=mt6768_defconfig
+POST_DEFCONFIG_CMDS='KCONFIG_CONFIG=${OUT_DIR}/.config ${KERNEL_DIR}/scripts/kconfig/merge_config.sh -m ${OUT_DIR}/.config ${KERNEL_DIR}/arch/arm64/configs/gale.config'
+
+EXT_MODULES="kernel_modules"
+
+MAKE_GOALS="modules"
+
+GKI_BUILD_CONFIG=
+GKI_PREBUILTS_DIR=${GKI_PREBUILTS_DIR:-${ROOT_DIR}/out-gale/dist}
+KMI_SYMBOL_LIST=
+ADDITIONAL_KMI_SYMBOL_LISTS=
+ABI_DEFINITION=
+GKI_MODULES_LIST=
+KMI_ENFORCED=
+KMI_SYMBOL_LIST_STRICT_MODE=
+TRIM_NONLISTED_KMI=
+MODULES_ORDER=
+
+HERMETIC_TOOLCHAIN=0
+BUILDTOOLS_PREBUILT_BIN=build/build-tools/path/linux-x86
+DTC=dtc
+LTO=none
+
+# Internal Longcheer repository is not shipped; point at the placeholder.
+LQ_KERNEL_DIR=${ROOT_DIR}/vendor/longcheer/mtk/kernel_modules
+
+# The kernel headers tarball is not needed for a device module build.
+SKIP_CP_KERNEL_HDR=1
+
+# Do not install the GKI core modules from kernel-6.6: they belong to
+# system_dlkm and must stay the stock ones.  Only the kernel_modules
+# (vendor_dlkm) modules go to staging/dist.
+IN_KERNEL_MODULES=
+
+# The GKI image is not rebuilt here; only the modules need to go to dist.
+FILES=""
+DIST_CMDS='cp -p ${OUT_DIR}/.config ${DIST_DIR}'

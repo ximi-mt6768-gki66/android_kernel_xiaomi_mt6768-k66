@@ -110,7 +110,15 @@ struct gpufreq_core_mask_info g_core_mask_table_6768[] = {
 /**************************************************
  * PMIC Setting MT6768
  **************************************************/
+#ifdef CONFIG_ATROCIOUS_GPU_OC
+#define GPU_OC_OPP0_FREQ	(1100000)	/* KHz */
+#define GPU_OC_OPP0_VOLT	(100000)	/* mV x 100 */
+#define GPU_OC_OPP1_FREQ	(1050000)	/* KHz */
+#define GPU_OC_OPP1_VOLT	(97500)		/* mV x 100 */
+#define VGPU_MAX_VOLT		(GPU_OC_OPP0_VOLT)
+#else
 #define VGPU_MAX_VOLT		(95000)         /* mV x 100 */
+#endif
 #define VGPU_MIN_VOLT       (61250)         /* mV x 100 */
 #define VSRAM_MAX_VOLT      (105000)        /* mV x 100 */
 #define VSRAM_MIN_VOLT      (85000)         /* mV x 100 */
@@ -223,8 +231,13 @@ struct gpufreq_status {
  **************************************************/
 #define SIGNED_OPP_GPU_NUM              ARRAY_SIZE(g_default_gpu)
 struct gpufreq_opp_info g_default_gpu[] = {
+#ifdef CONFIG_ATROCIOUS_GPU_OC
+	GPUOP(GPU_OC_OPP0_FREQ, GPU_OC_OPP0_VOLT, VSRAM_MAX_VOLT, POSDIV_POWER_2, 1875, 0),
+	GPUOP(GPU_OC_OPP1_FREQ, GPU_OC_OPP1_VOLT, VSRAM_MAX_VOLT, POSDIV_POWER_2, 1875, 0),
+#else
 	GPUOP(1000000, 95000, 105000, POSDIV_POWER_2, 1875, 0), /*  0 sign off */
 	GPUOP(975000, 92500, 102500, POSDIV_POWER_2, 1875, 0), /*  1 */
+#endif
 	GPUOP(950000, 90000, 100000, POSDIV_POWER_2, 1875, 0), /*  2 */
 	GPUOP(925000, 87500, 97500, POSDIV_POWER_2, 1875, 0), /*  3 */
 	GPUOP(900000, 85000, 95000, POSDIV_POWER_2, 1875, 0), /*  4 */

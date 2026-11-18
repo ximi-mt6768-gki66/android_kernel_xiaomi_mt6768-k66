@@ -93,6 +93,9 @@ config MTK_GPU_MT6768_SUPPORT
 	  and set N to disable.
 	  It is additional config to separate platforms.
 
+config CONFIG_ATROCIOUS_GPU_OC
+	bool "Overclock the MT6768 GPU DVFS table"
+
 config MTK_GPU_MT6853_SUPPORT
 	tristate "Specify Mediatek GPU Platform is mt6853"
 	depends on MTK_GPU_SUPPORT
