@@ -21,6 +21,10 @@ CONFIG_MALI_MIDGARD := $(CONFIG_MTK_GPU_SUPPORT)
 # use mtk platform
 CONFIG_MALI_PLATFORM_NAME := $(MTK_PLATFORM)
 
+# clang 18 flags several set-but-unused variables in the MTK platform glue;
+# keep the DDK's global -Werror usable.
+ccflags-y += -Wno-unused-but-set-variable
+
 ccflags-y += -I$(DEVICE_MODULES_PATH)/include
 ccflags-y += -I$(DEVICE_MODULES_PATH)/drivers/staging/android
 ccflags-y += -I$(DEVICE_MODULES_PATH)/drivers/misc/mediatek/base/power/include
